@@ -19,5 +19,6 @@ func ExpectedInt(a int, b int, t *testing.T) {
 func IsNil(a any, name string, t *testing.T) {
 	if a == nil {
 		t.Errorf("%s is nil", name)
+		t.FailNow()
 	}
 }

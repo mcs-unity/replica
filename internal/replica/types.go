@@ -12,6 +12,6 @@ type IReplica interface {
 }
 
 type Replica struct {
-	address *url.URL
-	state   shared.State
+	addr  *url.URL
+	state shared.State
 }

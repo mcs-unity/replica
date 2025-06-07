@@ -9,10 +9,10 @@ import (
 )
 
 /*
-returns an ipv4 address or url
+returns an registered url
 */
 func (r Replica) Address() *url.URL {
-	return r.address
+	return r.addr
 }
 
 /*
@@ -28,15 +28,15 @@ example:
 ip: 192.168.32.33/path/:id?param1=pm&param2=pm2 or
 url: mydomain.com/path/:id?param1=pm&param2=pm2
 */
-func New(address string) (IReplica, error) {
-	if strings.Trim(address, "") == "" {
+func New(addr string) (IReplica, error) {
+	if strings.Trim(addr, "") == "" {
 		return nil, errors.New("empty address")
 	}
 
-	url, err := url.Parse(address)
+	uri, err := url.ParseRequestURI(addr)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Replica{address: url, state: shared.UNKNOWN}, nil
+	return &Replica{addr: uri, state: shared.UNKNOWN}, nil
 }

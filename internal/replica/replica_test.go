@@ -6,8 +6,8 @@ import (
 	"github.com/mcs-unity/replica/internal/shared"
 )
 
-const ip = "180.22.31.14"
-const uri = "test.com/test?param=123&param2=aa"
+const ip = "http://192.168.1.1"
+const uri = "https://test.com/test?param=123&param2=aa"
 
 func new(address string, t *testing.T) IReplica {
 	r, err := New(address)
@@ -37,6 +37,22 @@ func TestGetAddress(t *testing.T) {
 func TestGetInitialState(t *testing.T) {
 	r := new(ip, t)
 	shared.IsNil(r, "replica", t)
-
 	shared.ExpectedInt(int(r.State()), int(shared.UNKNOWN), t)
+}
+
+func TestBadIp(t *testing.T) {
+	_, err := New("")
+	if err == nil {
+		t.Error("failed to capture empty string")
+	}
+
+	_, err = New("192.168.1")
+	if err == nil {
+		t.Error("failed to capture bad ip address")
+	}
+
+	_, err = New("domain.com?/asd")
+	if err == nil {
+		t.Error("failed to capture bad url")
+	}
 }
