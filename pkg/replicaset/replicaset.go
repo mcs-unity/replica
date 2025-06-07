@@ -1,17 +1,19 @@
-package replica
+package replicaset
 
 import (
 	"encoding/json"
 	"io"
 	"os"
 	"sync"
+
+	"github.com/mcs-unity/replica/internal/replica"
 )
 
-func (r *Replicas) Add(address string) error {
+func (r *ReplicaSet) Add(address string) error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
-	replica, err := new(address)
+	replica, err := replica.New(address)
 	if err != nil {
 		return err
 	}
@@ -21,7 +23,7 @@ func (r *Replicas) Add(address string) error {
 	return nil
 }
 
-func (r Replicas) List() []IReplica {
+func (r ReplicaSet) List() []replica.IReplica {
 	return r.address
 }
 
@@ -49,7 +51,7 @@ func New(dir os.Root) (IReplicaSet, error) {
 		return nil, err
 	}
 
-	set := &Replicas{address: []IReplica{}, lock: &sync.Mutex{}}
+	set := &ReplicaSet{address: []replica.IReplica{}, lock: &sync.Mutex{}}
 	if err := processFile(file, set); err != nil {
 		return nil, err
 	}
