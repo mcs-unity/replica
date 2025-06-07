@@ -1,7 +1,9 @@
 package replica
 
 import (
+	"encoding/json"
 	"errors"
+	"io"
 	"net/url"
 	"strings"
 
@@ -20,6 +22,20 @@ returns the state or the replica
 */
 func (r Replica) State() shared.State {
 	return r.state
+}
+
+func (r *Replica) Online(re io.Reader) error {
+	j := json.NewDecoder(re)
+	rs := &RemoteState{}
+	if err := j.Decode(rs); err != nil {
+		r.state = shared.UNKNOWN
+		return err
+	}
+
+	if rs.Online {
+		r.state = shared.UP
+	}
+	return nil
 }
 
 /*
