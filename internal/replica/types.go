@@ -1,15 +1,17 @@
 package replica
 
 import (
+	"net/url"
+
 	"github.com/mcs-unity/replica/internal/shared"
 )
 
 type IReplica interface {
-	Address() string
+	Address() *url.URL
 	State() shared.State
 }
 
 type Replica struct {
-	address string
+	address *url.URL
 	state   shared.State
 }

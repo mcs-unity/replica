@@ -2,27 +2,41 @@ package replica
 
 import (
 	"errors"
+	"net/url"
 	"strings"
 
 	"github.com/mcs-unity/replica/internal/shared"
 )
 
-func (r Replica) Address() string {
+/*
+returns an ipv4 address or url
+*/
+func (r Replica) Address() *url.URL {
 	return r.address
 }
 
+/*
+returns the state or the replica
+*/
 func (r Replica) State() shared.State {
 	return r.state
 }
 
 /*
-provide the directory path
-where there must be a replica.json
+provide ip or valid url to create a new replica
+example:
+ip: 192.168.32.33/path/:id?param1=pm&param2=pm2 or
+url: mydomain.com/path/:id?param1=pm&param2=pm2
 */
 func New(address string) (IReplica, error) {
 	if strings.Trim(address, "") == "" {
 		return nil, errors.New("empty address")
 	}
 
-	return &Replica{address: address, state: shared.UNKNOWN}, nil
+	url, err := url.Parse(address)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Replica{address: url, state: shared.UNKNOWN}, nil
 }
