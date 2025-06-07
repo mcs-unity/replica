@@ -63,7 +63,6 @@ func TestBadIp(t *testing.T) {
 func TestOnline(t *testing.T) {
 	r := new(ip, t)
 	shared.IsNil(r, "replica", t)
-
 	rs := &RemoteState{Online: true, timestamp: time.Now().UTC()}
 	buff := bytes.NewBuffer([]byte{})
 	go func() {

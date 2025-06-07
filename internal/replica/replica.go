@@ -24,6 +24,10 @@ func (r Replica) State() shared.State {
 	return r.state
 }
 
+/*
+online will read a buffer expecting a json string
+the expected payload is a RemoteState
+*/
 func (r *Replica) Online(re io.Reader) error {
 	j := json.NewDecoder(re)
 	rs := &RemoteState{}
