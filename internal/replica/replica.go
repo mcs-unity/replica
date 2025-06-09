@@ -1,12 +1,12 @@
 package replica
 
 import (
-	"encoding/json"
 	"errors"
 	"io"
 	"net/url"
 	"strings"
 
+	"github.com/mcs-unity/replica/internal/decoder"
 	"github.com/mcs-unity/replica/internal/shared"
 )
 
@@ -29,9 +29,8 @@ online will read a buffer expecting a json string
 the expected payload is a RemoteState
 */
 func (r *Replica) Online(re io.Reader) error {
-	j := json.NewDecoder(re)
 	rs := &RemoteState{}
-	if err := j.Decode(rs); err != nil {
+	if err := decoder.Decode(re, rs); err != nil {
 		r.state = shared.UNKNOWN
 		return err
 	}
