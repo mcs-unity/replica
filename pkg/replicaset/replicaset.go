@@ -2,6 +2,7 @@ package replicaset
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -10,6 +11,9 @@ import (
 	"github.com/mcs-unity/replica/internal/replica"
 )
 
+/*
+creates a new replica and adds it into the replicaset
+*/
 func (r *ReplicaSet) Add(address string) error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
@@ -20,18 +24,32 @@ func (r *ReplicaSet) Add(address string) error {
 	}
 
 	r.address = append(r.address, replica)
-
 	return nil
 }
 
-func (r ReplicaSet) List() []replica.IReplica {
+/*
+returns a list of replicas registered
+*/
+func (r *ReplicaSet) List() []replica.IReplica {
+	r.lock.Lock()
+	defer r.lock.Unlock()
 	return r.address
+}
+
+func (r ReplicaSet) Log(err error) {
+	if r.rw == nil {
+		return
+	}
+
+	if _, err := r.rw.Write([]byte(err.Error())); err != nil {
+		fmt.Println(err)
+	}
 }
 
 /*
 read the file and decode the json value into the replica set
 */
-func processFile(r io.Reader, set IReplicaSet) error {
+func (re *ReplicaSet) processFile(r io.Reader) error {
 	read := json.NewDecoder(r)
 	arr := make([]config, 0)
 	if err := read.Decode(&arr); err != nil {
@@ -39,12 +57,10 @@ func processFile(r io.Reader, set IReplicaSet) error {
 	}
 
 	for _, l := range arr {
-		if err := set.Add(l.Url); err != nil {
-			fmt.Println(err)
+		if err := re.Add(l.Url); err != nil {
+			re.Log(err)
 		}
 	}
-
-	fmt.Println(set.List()[0].State())
 	return nil
 }
 
@@ -52,17 +68,24 @@ func processFile(r io.Reader, set IReplicaSet) error {
 provide the directory path
 where there must be a replica.json
 */
-func New(dir *os.Root) (IReplicaSet, error) {
+func New(dir *os.Root, log io.Writer) (IReplicaSet, error) {
+	if dir == nil {
+		return nil, errors.New(ERROR_ROOT_NIL)
+	}
+
+	if log == nil {
+		fmt.Println(WARNING)
+	}
+
 	file, err := dir.OpenFile("replica.json", os.O_RDONLY, 0o777)
 	defer file.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	set := &ReplicaSet{address: []replica.IReplica{}, lock: &sync.Mutex{}}
-	if err := processFile(file, set); err != nil {
+	set := &ReplicaSet{rw: log, address: []replica.IReplica{}, lock: &sync.Mutex{}}
+	if err := set.processFile(file); err != nil {
 		return nil, err
 	}
-
-	return nil, nil
+	return set, nil
 }

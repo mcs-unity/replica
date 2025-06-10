@@ -1,4 +1,11 @@
 [
-  { "url": "http://localhost:3002/online" },
-  { "url": "http://192.168.1.92:3000/online" }
+  {
+    "url": "http://localhost:3002/online",
+    "auth": "185f8db32271fe25f561a6fc938b2e264306ec304eda518007d1764826381969"
+  },
+  {
+    "url": "http://192.168.1.92:3000/online",
+    "auth": "fd237ee90f0e2d65078bca2766f7727bc6510a151c5fc5023cef5c5dd913080f"
+  },
+  { "url": "192.168.1.92:3000/bad_url", "auth": "" }
 ]
