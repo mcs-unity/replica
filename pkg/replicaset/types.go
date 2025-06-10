@@ -8,6 +8,10 @@ import (
 
 type configFile = string
 
+type config struct {
+	Url string `json:"url,omitempty"`
+}
+
 type IReplicaSet interface {
 	Add(string) error
 	List() []replica.IReplica

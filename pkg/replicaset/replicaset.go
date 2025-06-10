@@ -2,6 +2,7 @@ package replicaset
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"sync"
@@ -32,11 +33,18 @@ read the file and decode the json value into the replica set
 */
 func processFile(r io.Reader, set IReplicaSet) error {
 	read := json.NewDecoder(r)
-
-	if err := read.Decode(&set); err != nil {
+	arr := make([]config, 0)
+	if err := read.Decode(&arr); err != nil {
 		return err
 	}
 
+	for _, l := range arr {
+		if err := set.Add(l.Url); err != nil {
+			fmt.Println(err)
+		}
+	}
+
+	fmt.Println(set.List()[0].State())
 	return nil
 }
 
@@ -44,7 +52,7 @@ func processFile(r io.Reader, set IReplicaSet) error {
 provide the directory path
 where there must be a replica.json
 */
-func New(dir os.Root) (IReplicaSet, error) {
+func New(dir *os.Root) (IReplicaSet, error) {
 	file, err := dir.OpenFile("replica.json", os.O_RDONLY, 0o777)
 	defer file.Close()
 	if err != nil {

@@ -48,3 +48,28 @@ func TestEncode(t *testing.T) {
 		t.Error("failed to find TestMe in string")
 	}
 }
+
+func BenchmarkDecode(b *testing.B) {
+	buff := bytes.NewBuffer([]byte{})
+	p := Test{Name: "TestMe"}
+	for b.Loop() {
+		if err := Encode(buff, p); err != nil {
+			b.Error(err)
+		}
+	}
+}
+
+func BenchmarkEncode(b *testing.B) {
+	buff := bytes.NewBuffer([]byte{})
+	p := Test{}
+
+	for b.Loop() {
+		go func() {
+			buff.Write([]byte("{\"Name\":\"TestMe\"}"))
+		}()
+		time.Sleep(10 * time.Millisecond)
+		if err := Decode(buff, &p); err != nil {
+			b.Error(err)
+		}
+	}
+}

@@ -17,6 +17,10 @@ func Decode(r io.Reader, target any) error {
 	return nil
 }
 
+/*
+Encodes the payload into a json string and writes
+directly to the Writer
+*/
 func Encode(w io.Writer, payload any) error {
 	d := json.NewEncoder(w)
 	if err := d.Encode(payload); err != nil {
