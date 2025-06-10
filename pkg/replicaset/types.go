@@ -20,6 +20,7 @@ type config struct {
 type IReplicaSet interface {
 	Add(string) error
 	List() []replica.IReplica
+	Online() error
 }
 
 type ReplicaSet struct {

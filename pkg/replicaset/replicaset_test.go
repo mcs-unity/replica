@@ -39,3 +39,15 @@ func TestBadReplica(t *testing.T) {
 		t.Error("failed to capture nil pointer")
 	}
 }
+
+func TestOnline(t *testing.T) {
+	r := getRoot(t)
+	re, err := New(r, os.Stderr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if err := re.Online(); err != nil {
+		t.Error(err)
+	}
+}
