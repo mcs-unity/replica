@@ -11,6 +11,8 @@ const ERROR_ROOT_NIL = "dir os.Root can't be a nil pointer"
 const WARNING = "replication warning: log is a nil pointer errors will not be logged"
 
 type configFile = string
+type writer = func(r replica.IReplica) error
+type OnError func(re replica.IReplica, err error)
 
 type config struct {
 	Url  string `json:"url,omitempty"`
@@ -20,7 +22,7 @@ type config struct {
 type IReplicaSet interface {
 	Add(string) error
 	List() []replica.IReplica
-	Online() error
+	Sync(w writer, up bool) error
 }
 
 type ReplicaSet struct {

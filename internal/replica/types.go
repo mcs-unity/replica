@@ -11,6 +11,7 @@ import (
 type IReplica interface {
 	Address() *url.URL
 	State() shared.State
+	Report(s shared.State)
 	Online(rw io.Reader) error
 }
 
@@ -21,5 +22,5 @@ type Replica struct {
 
 type RemoteState struct {
 	Online    bool
-	timestamp time.Time
+	Timestamp time.Time
 }

@@ -1,8 +1,13 @@
 package replicaset
 
 import (
+	"errors"
 	"os"
 	"testing"
+	"time"
+
+	"github.com/mcs-unity/replica/internal/replica"
+	"github.com/mcs-unity/replica/internal/shared"
 )
 
 func getRoot(t *testing.T) *os.Root {
@@ -47,7 +52,21 @@ func TestOnline(t *testing.T) {
 		t.Error(err)
 	}
 
-	if err := re.Online(); err != nil {
+	fn := func(r replica.IReplica) error {
+		rs := &replica.RemoteState{Online: true, Timestamp: time.Now().UTC()}
+		buff := shared.WriteBuffer(rs, t)
+		time.Sleep(100 * time.Millisecond)
+		if err := r.Online(buff); err != nil {
+			return err
+		}
+
+		if r.State() != shared.UP {
+			return errors.New("failed to mark replicas as online")
+		}
+		return nil
+	}
+
+	if err := re.Sync(fn, false); err != nil {
 		t.Error(err)
 	}
 }

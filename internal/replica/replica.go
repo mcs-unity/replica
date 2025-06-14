@@ -25,6 +25,13 @@ func (r Replica) State() shared.State {
 }
 
 /*
+change state
+*/
+func (r *Replica) Report(s shared.State) {
+	r.state = s
+}
+
+/*
 online will read a buffer expecting a json string
 the expected payload is a RemoteState
 */

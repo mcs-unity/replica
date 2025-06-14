@@ -41,7 +41,7 @@ func (r ReplicaSet) Log(err error) {
 		return
 	}
 
-	if _, err := r.rw.Write([]byte(err.Error())); err != nil {
+	if _, err := r.rw.Write([]byte(err.Error() + "\n")); err != nil {
 		fmt.Println(err)
 	}
 }

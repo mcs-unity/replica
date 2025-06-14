@@ -1,8 +1,6 @@
 package replica
 
 import (
-	"bytes"
-	"encoding/json"
 	"testing"
 	"time"
 
@@ -63,18 +61,8 @@ func TestBadIp(t *testing.T) {
 func TestOnline(t *testing.T) {
 	r := new(ip, t)
 	shared.IsNil(r, "replica", t)
-	rs := &RemoteState{Online: true, timestamp: time.Now().UTC()}
-	buff := bytes.NewBuffer([]byte{})
-	go func() {
-		b, err := json.Marshal(rs)
-		if err != nil {
-			t.Error(err)
-		}
-		if _, err := buff.Write(b); err != nil {
-			t.Error(err)
-		}
-	}()
-
+	rs := &RemoteState{Online: true, Timestamp: time.Now().UTC()}
+	buff := shared.WriteBuffer(rs, t)
 	time.Sleep(10 * time.Millisecond)
 	if err := r.Online(buff); err != nil {
 		t.Error(err)
