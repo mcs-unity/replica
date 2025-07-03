@@ -10,6 +10,7 @@ import (
 
 type IReplica interface {
 	Address() *url.URL
+	AuthKey() (string, error)
 	State() shared.State
 	Report(s shared.State)
 	Online(rw io.Reader) error
@@ -17,6 +18,7 @@ type IReplica interface {
 
 type Replica struct {
 	addr  *url.URL
+	auth  string
 	state shared.State
 }
 

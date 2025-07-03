@@ -14,11 +14,11 @@ import (
 /*
 creates a new replica and adds it into the replicaset
 */
-func (r *ReplicaSet) Add(address string) error {
+func (r *ReplicaSet) Add(c config) error {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
-	replica, err := replica.New(address)
+	replica, err := replica.New(c.Url, c.Auth)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (re *ReplicaSet) processFile(r io.Reader) error {
 	}
 
 	for _, l := range arr {
-		if err := re.Add(l.Url); err != nil {
+		if err := re.Add(l); err != nil {
 			re.Log(err)
 		}
 	}

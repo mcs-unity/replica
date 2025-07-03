@@ -70,3 +70,19 @@ func TestOnline(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestAuthentication(t *testing.T) {
+	r := getRoot(t)
+	re, err := New(r, os.Stderr)
+	if err != nil {
+		t.Error(err)
+	}
+
+	fn := func(r replica.IReplica) error {
+		return nil
+	}
+
+	if err := re.Sync(fn, false); err != nil {
+		t.Error(err)
+	}
+}

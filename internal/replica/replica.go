@@ -48,13 +48,20 @@ func (r *Replica) Online(re io.Reader) error {
 	return nil
 }
 
+func (r Replica) AuthKey() (string, error) {
+	if strings.Trim(r.auth, "") == "" {
+		return "", errors.New("empty auth key")
+	}
+	return r.auth, nil
+}
+
 /*
 provide ip or valid url to create a new replica
 example:
 ip: 192.168.32.33/path/:id?param1=pm&param2=pm2 or
 url: mydomain.com/path/:id?param1=pm&param2=pm2
 */
-func New(addr string) (IReplica, error) {
+func New(addr string, authKey string) (IReplica, error) {
 	if strings.Trim(addr, "") == "" {
 		return nil, errors.New("empty address")
 	}
@@ -64,5 +71,5 @@ func New(addr string) (IReplica, error) {
 		return nil, err
 	}
 
-	return &Replica{addr: uri, state: shared.UNKNOWN}, nil
+	return &Replica{addr: uri, auth: authKey, state: shared.UNKNOWN}, nil
 }

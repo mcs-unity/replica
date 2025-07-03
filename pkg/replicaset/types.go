@@ -20,7 +20,7 @@ type config struct {
 }
 
 type IReplicaSet interface {
-	Add(string) error
+	Add(config) error
 	List() []replica.IReplica
 	Sync(w writer, up bool) error
 }
