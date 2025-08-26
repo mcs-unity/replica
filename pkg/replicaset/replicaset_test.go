@@ -79,6 +79,9 @@ func TestAuthentication(t *testing.T) {
 	}
 
 	fn := func(r replica.IReplica) error {
+		if _, err := r.AuthKey(); err != nil {
+			t.Error(err)
+		}
 		return nil
 	}
 

@@ -48,6 +48,10 @@ func (r *Replica) Online(re io.Reader) error {
 	return nil
 }
 
+/*
+returns a authentication key that can be used
+in a HTTP authorization header
+*/
 func (r Replica) AuthKey() (string, error) {
 	if strings.Trim(r.auth, "") == "" {
 		return "", errors.New("empty auth key")

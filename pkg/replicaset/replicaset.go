@@ -78,10 +78,10 @@ func New(dir *os.Root, log io.Writer) (IReplicaSet, error) {
 	}
 
 	file, err := dir.OpenFile("replica.json", os.O_RDONLY, 0o777)
-	defer file.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 
 	set := &ReplicaSet{rw: log, address: []replica.IReplica{}, lock: &sync.Mutex{}}
 	if err := set.processFile(file); err != nil {
