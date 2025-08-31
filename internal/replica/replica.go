@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/mcs-unity/replica/internal/decoder"
 	"github.com/mcs-unity/replica/internal/shared"
@@ -29,6 +30,23 @@ change state
 */
 func (r *Replica) Report(s shared.State) {
 	r.state = s
+}
+
+/*
+returns latest error message that was reported
+*/
+func (r Replica) Error() ErrorMessage {
+	return r.err
+}
+
+/*
+assigns an error to the errorMessage
+*/
+func (r *Replica) SetError(err error) {
+	if err == nil {
+		return
+	}
+	r.err = ErrorMessage{time.Now().UTC(), err}
 }
 
 /*

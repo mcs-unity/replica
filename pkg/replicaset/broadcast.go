@@ -39,7 +39,7 @@ func (r *ReplicaSet) Sync(w writer, up bool) error {
 	}
 
 	if write(l, w, r.OnError, up) {
-		return errors.New("failures reported verify replica states")
+		return errors.New("failures reported")
 	}
 
 	return nil
@@ -60,7 +60,7 @@ to replicas that are deemed online set up to true
 func write(l []replica.IReplica, w writer, fn OnError, up bool) bool {
 	failed := false
 	for _, re := range l {
-		if up && re.State() < shared.ERROR {
+		if up && re.State() != shared.UP {
 			continue
 		}
 
