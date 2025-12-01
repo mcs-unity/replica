@@ -110,7 +110,7 @@ The response must be a valid response payload see bellow.
 ```
 
 Calling Online is not required when making a sync call where data is synchronized to another service.
-It's only used to verify that the service is still online
+It's only used to verify that the service is still online.
 
 ### Built With
 
