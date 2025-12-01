@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/mcs-unity/replica/internal/shared"
+	"github.com/mcs-unity/replica/pkg/remotetypes"
 )
 
 const ip = "http://192.168.1.1"
@@ -61,7 +62,7 @@ func TestBadIp(t *testing.T) {
 func TestOnline(t *testing.T) {
 	r := new(ip, t)
 	shared.IsNil(r, "replica", t)
-	rs := &RemoteState{Online: true, Timestamp: time.Now().UTC()}
+	rs := &remotetypes.RemoteState{Online: true, Timestamp: time.Now().UTC()}
 	buff := shared.WriteBuffer(rs, t)
 	time.Sleep(10 * time.Millisecond)
 	if err := r.Online(buff); err != nil {

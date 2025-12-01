@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/mcs-unity/replica/internal/replica"
+	"github.com/mcs-unity/replica/pkg/remotetypes"
 )
 
 func online(w http.ResponseWriter, r *http.Request) {
@@ -15,7 +15,7 @@ func online(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("method not allowed"))
 	}
 
-	resp, err := json.Marshal(replica.RemoteState{Online: false, Timestamp: time.Now().UTC()})
+	resp, err := json.Marshal(remotetypes.RemoteState{Online: false, Timestamp: time.Now().UTC()})
 	if err != nil {
 		w.WriteHeader(500)
 		w.Write([]byte("failed to process payload"))

@@ -9,6 +9,7 @@ import (
 
 	"github.com/mcs-unity/replica/internal/decoder"
 	"github.com/mcs-unity/replica/internal/shared"
+	"github.com/mcs-unity/replica/pkg/remotetypes"
 )
 
 /*
@@ -54,7 +55,7 @@ online will read a buffer expecting a json string
 the expected payload is a RemoteState
 */
 func (r *Replica) Online(re io.Reader) error {
-	rs := &RemoteState{}
+	rs := &remotetypes.RemoteState{}
 	if err := decoder.Decode(re, rs); err != nil {
 		r.state = shared.UNKNOWN
 		return err

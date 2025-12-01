@@ -29,8 +29,3 @@ type Replica struct {
 	state shared.State
 	err   ErrorMessage
 }
-
-type RemoteState struct {
-	Online    bool
-	Timestamp time.Time
-}
