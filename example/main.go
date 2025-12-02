@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/mcs-unity/replica/internal/replica"
+	"github.com/mcs-unity/replica/pkg/replica"
 	"github.com/mcs-unity/replica/pkg/replicaset"
 )
 

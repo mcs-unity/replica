@@ -6,9 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mcs-unity/replica/internal/replica"
 	"github.com/mcs-unity/replica/internal/shared"
-	"github.com/mcs-unity/replica/pkg/remotetypes"
+	"github.com/mcs-unity/replica/pkg/replica"
 )
 
 func getRoot(t *testing.T) *os.Root {
@@ -54,7 +53,7 @@ func TestOnline(t *testing.T) {
 	}
 
 	fn := func(r replica.IReplica) error {
-		rs := &remotetypes.RemoteState{Online: true, Timestamp: time.Now().UTC()}
+		rs := &replica.RemoteState{Online: true, Timestamp: time.Now().UTC()}
 		buff := shared.WriteBuffer(rs, t)
 		time.Sleep(100 * time.Millisecond)
 		if err := r.Online(buff); err != nil {

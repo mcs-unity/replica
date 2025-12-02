@@ -3,8 +3,8 @@ package replicaset
 import (
 	"errors"
 
-	"github.com/mcs-unity/replica/internal/replica"
 	"github.com/mcs-unity/replica/internal/shared"
+	"github.com/mcs-unity/replica/pkg/replica"
 )
 
 /*

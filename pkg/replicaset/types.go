@@ -4,7 +4,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/mcs-unity/replica/internal/replica"
+	"github.com/mcs-unity/replica/pkg/replica"
 )
 
 const ERROR_ROOT_NIL = "dir os.Root can't be a nil pointer"
