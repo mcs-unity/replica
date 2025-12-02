@@ -83,8 +83,10 @@ func isOnline(r replica.IReplica) error {
         return fmt.Errorf("unable to process request, %d:%s", resp.StatusCode, body)
     }
 
-    // do not call concurrently as defer resp.Body.Close() most likely will be called
-    // which might trigger an error
+    // do not call concurrently as defer resp.Body.Close()
+    // will probably have executed before r.Online
+    // this will create an behavior that will be difficult
+    // debug since the bug will trigger randomly.
     if err := r.Online(resp.Body); err != nil {
         return err
     }
